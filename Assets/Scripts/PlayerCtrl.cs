@@ -15,6 +15,8 @@ public class PlayerCtrl : MonoBehaviour
     public float boxHeight;
     public LayerMask whatIsGround;  // to check the layer
 
+    
+
     private Rigidbody2D rb2D;
 
     private void Awake()
@@ -25,33 +27,77 @@ public class PlayerCtrl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
-        
+         
     }
 
     // Update is called once per frame
     void Update()
     {
-
         isGrounded = Physics2D.OverlapBox(new Vector2(feet.position.x, feet.position.y), new Vector2(boxWidth, boxHeight), 360.0f, whatIsGround);
 
+        
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Jump");
 
-        moveCharacter(horizontal, vertical);
-        playMovementAnimation(horizontal, vertical);
+        moveCharacter(horizontal);
+
+        crouch();
        
-      /*if(Input.GetButtonDown("Jump"))
+        playMovementAnimation(horizontal);
+
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             Jump();
         }
-      */
+    }
 
-        if (Input.GetButton("Jump"))
+
+    private void OnDrawGizmos() // draws gizmos foe debugging
+    {
+        Gizmos.DrawWireCube(feet.position, new Vector3(boxWidth, boxHeight, 0));
+    }
+
+
+    void moveCharacter(float horizontal)   // function to move player 
+    {
+        Vector3 position = transform.position;
+        position.x += horizontal * speed * Time.deltaTime;
+        transform.position = position;
+    }
+
+    private void playMovementAnimation(float horizontal)
+    {
+       
+        Vector3 scale = transform.localScale;
+
+        if (horizontal < 0)
         {
-            Jump();
+            scale.x = -1f * Mathf.Abs(scale.x);
         }
+        else if (horizontal > 0)
+        {
+            scale.x = Mathf.Abs(scale.x);
+        }
+        transform.localScale = scale;
 
+       
+       animator.SetFloat("Speed", Mathf.Abs(horizontal));
+
+    }
+
+
+    void Jump()  // jump function
+    {
+        if (isGrounded)
+        {
+           animator.SetTrigger("jump");
+           rb2D.velocity = new Vector2(rb2D.velocity.x, jumpSpeed);
+        }
+    }
+
+
+    void crouch()
+    {
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
 
@@ -69,64 +115,6 @@ public class PlayerCtrl : MonoBehaviour
             animator.SetBool("Crouch", false);
         }
     }
-
-
-    private void OnDrawGizmos() // draws gizmos foe debugging
-    {
-        Gizmos.DrawWireCube(feet.position, new Vector3(boxWidth, boxHeight, 0));
-    }
-
-    void moveCharacter(float horizontal, float vertical)   // function to move player 
-    {
-        Vector3 position = transform.position;
-        position.x += horizontal * speed * Time.deltaTime;
-        transform.position = position;
-
-      /*  if(vertical > 0)
-        {
-            if(isGrounded)
-            {
-                rb2D.AddForce(new Vector2(0f, jump), ForceMode2D.Force);
-            }
-        }*/
-    }
-
-    private void playMovementAnimation(float horizontal, float vertical)
-    {
-        animator.SetFloat("Speed", Mathf.Abs(horizontal));
-
-        Vector3 scale = transform.localScale;
-
-        if (horizontal < 0)
-        {
-            scale.x = -1f * Mathf.Abs(scale.x);
-        }
-        else if (horizontal > 0)
-        {
-            scale.x = Mathf.Abs(scale.x);
-        }
-        transform.localScale = scale;
-
-        // Jump logic
-        if(vertical > 0)
-        {
-            animator.SetBool("Jump", true);
-        }
-        else
-        {
-            animator.SetBool("Jump", false);
-        }
-    }
-
-
-    void Jump()  // jump function
-    {
-        if (isGrounded)
-        {
-            rb2D.AddForce(new Vector2(0f, jumpSpeed), ForceMode2D.Force);
-        }
-    }
-
 }
 
 
