@@ -7,7 +7,13 @@ public class PlayerCtrl : MonoBehaviour
     public Animator animator;
 
     public float speed;   // speed at which player will move
-    public float jump;    // force on player jump
+    public float jumpSpeed;    // force on player jump
+    public bool isGrounded;  // to check wheteher player is on ground or not
+    public float feetRadius;
+    public Transform feet;  // to get feet gameobject from the inspector
+    public float boxWidth;
+    public float boxHeight;
+    public LayerMask whatIsGround;  // to check the layer
 
     private Rigidbody2D rb2D;
 
@@ -26,12 +32,25 @@ public class PlayerCtrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        isGrounded = Physics2D.OverlapBox(new Vector2(feet.position.x, feet.position.y), new Vector2(boxWidth, boxHeight), 360.0f, whatIsGround);
+
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Jump");
 
         moveCharacter(horizontal, vertical);
         playMovementAnimation(horizontal, vertical);
        
+      /*if(Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
+      */
+
+        if (Input.GetButton("Jump"))
+        {
+            Jump();
+        }
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
@@ -52,16 +71,24 @@ public class PlayerCtrl : MonoBehaviour
     }
 
 
+    private void OnDrawGizmos() // draws gizmos foe debugging
+    {
+        Gizmos.DrawWireCube(feet.position, new Vector3(boxWidth, boxHeight, 0));
+    }
+
     void moveCharacter(float horizontal, float vertical)   // function to move player 
     {
         Vector3 position = transform.position;
         position.x += horizontal * speed * Time.deltaTime;
         transform.position = position;
 
-        if(vertical > 0)
+      /*  if(vertical > 0)
         {
-            rb2D.AddForce(new Vector2(0f, jump), ForceMode2D.Force);
-        }
+            if(isGrounded)
+            {
+                rb2D.AddForce(new Vector2(0f, jump), ForceMode2D.Force);
+            }
+        }*/
     }
 
     private void playMovementAnimation(float horizontal, float vertical)
@@ -90,6 +117,16 @@ public class PlayerCtrl : MonoBehaviour
             animator.SetBool("Jump", false);
         }
     }
+
+
+    void Jump()  // jump function
+    {
+        if (isGrounded)
+        {
+            rb2D.AddForce(new Vector2(0f, jumpSpeed), ForceMode2D.Force);
+        }
+    }
+
 }
 
 
