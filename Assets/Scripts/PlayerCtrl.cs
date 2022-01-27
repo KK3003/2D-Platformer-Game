@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class PlayerCtrl : MonoBehaviour
@@ -45,9 +44,10 @@ public class PlayerCtrl : MonoBehaviour
        
         playMovementAnimation(horizontal);
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jumps") && isGrounded)
         {
             Jump();
+            
         }
     }
 
@@ -90,7 +90,8 @@ public class PlayerCtrl : MonoBehaviour
     {
         if (isGrounded)
         {
-           animator.SetTrigger("jump");
+            animator.SetTrigger("jump");
+            //animator.SetBool("Jump", true);
            rb2D.velocity = new Vector2(rb2D.velocity.x, jumpSpeed);
         }
     }
