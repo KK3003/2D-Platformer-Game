@@ -5,13 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class GarbageCollecterCtrl : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             SceneManager.LoadScene("Prototype");
             Debug.Log("Player Died");
-
         }
     }
 }
