@@ -14,7 +14,7 @@ public class PlayerCtrl : MonoBehaviour
     public float boxHeight;
     public LayerMask whatIsGround;  // to check the layer
 
-    
+    public ScoreCtrl scoreCtrl;
 
     private Rigidbody2D rb2D;
 
@@ -115,6 +115,13 @@ public class PlayerCtrl : MonoBehaviour
 
             animator.SetBool("Crouch", false);
         }
+    }
+
+
+    public void pickUpKey()
+    {
+        Debug.Log("Player Picked the Key");
+        scoreCtrl.IncreaseScore(10);
     }
 }
 
