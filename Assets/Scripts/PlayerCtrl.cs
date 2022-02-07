@@ -18,7 +18,7 @@ public class PlayerCtrl : MonoBehaviour
     public int health;  // player health
     public GameObject heart1, heart2, heart3;
 
-    
+    public GameOverCtrl gameOverCtrl;
 
 
 
@@ -156,15 +156,15 @@ public class PlayerCtrl : MonoBehaviour
             heart1.SetActive(false);
             Debug.Log("Player Killed");
             animator.SetBool("Death", true);
-            ReloadLevel();
+            gameOverCtrl.ShowGameOverMenu();
+            this.enabled = false;
+
+          
         }
        
     }
 
-    void ReloadLevel()
-    {
-        SceneManager.LoadScene("Prototype");
-    }
+    
 
    
     private void OnCollisionEnter2D(Collision2D other)
