@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCtrl : MonoBehaviour
 {
@@ -122,6 +123,18 @@ public class PlayerCtrl : MonoBehaviour
     {
         Debug.Log("Player Picked the Key");
         scoreCtrl.IncreaseScore(10);
+    }
+
+    public void killPlayer()
+    {
+        Debug.Log("Player Killed");
+        animator.SetBool("Death", true);
+        ReloadLevel();
+    }
+
+    void ReloadLevel()
+    {
+        SceneManager.LoadScene("Prototype");
     }
 }
 
