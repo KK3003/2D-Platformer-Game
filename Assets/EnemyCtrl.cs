@@ -103,7 +103,7 @@ public class EnemyCtrl : MonoBehaviour
         Gizmos.DrawLine(leftBound.position, rightBound.position);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+   /* private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.GetComponent<PlayerCtrl>() != null)
         {
@@ -112,4 +112,5 @@ public class EnemyCtrl : MonoBehaviour
             
         }
     }
+   */
 }

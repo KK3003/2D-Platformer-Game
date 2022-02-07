@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerCtrl : MonoBehaviour
 {
@@ -14,10 +15,17 @@ public class PlayerCtrl : MonoBehaviour
     public float boxWidth;
     public float boxHeight;
     public LayerMask whatIsGround;  // to check the layer
+    public int health;  // player health
+    public GameObject heart1, heart2, heart3;
+
+    
+
+
 
     public ScoreCtrl scoreCtrl;
 
     private Rigidbody2D rb2D;
+   // SpriteRenderer sr;
 
     private void Awake()
     {
@@ -27,7 +35,9 @@ public class PlayerCtrl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-         
+        heart1.SetActive(true);
+        heart2.SetActive(true);
+        heart3.SetActive(true);
     }
 
     // Update is called once per frame
@@ -127,14 +137,44 @@ public class PlayerCtrl : MonoBehaviour
 
     public void killPlayer()
     {
-        Debug.Log("Player Killed");
-        animator.SetBool("Death", true);
-        ReloadLevel();
+        
+        if (health == 2)
+        {
+            heart3.SetActive(false);
+
+        }
+        if (health == 1)
+        {
+            heart3.SetActive(false);
+            heart2.SetActive(false);
+        }
+
+        if (health == 0)
+        {
+            heart3.SetActive(false);
+            heart2.SetActive(false);
+            heart1.SetActive(false);
+            Debug.Log("Player Killed");
+            animator.SetBool("Death", true);
+            ReloadLevel();
+        }
+       
     }
 
     void ReloadLevel()
     {
         SceneManager.LoadScene("Prototype");
+    }
+
+   
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.CompareTag("Enemy"))
+        {
+            health -= 1;
+            Debug.Log("Player touch" + health);
+            killPlayer();
+        }
     }
 }
 
